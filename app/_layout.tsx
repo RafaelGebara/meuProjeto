@@ -1,24 +1,66 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { Stack } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
-import 'react-native-reanimated';
-
-import { useColorScheme } from '@/hooks/use-color-scheme';
-
-export const unstable_settings = {
-  anchor: '(tabs)',
-};
+import { useState } from "react";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
+  const [valor, setValor] = useState(0);
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
-      </Stack>
-      <StatusBar style="auto" />
-    </ThemeProvider>
+    <View style={styles.container}>
+      <Text style={styles.numero}>{valor}</Text>
+      <View style= {styles.numerosCalculadora}>
+      <TouchableOpacity>
+      <Text> 1 </Text>
+      </TouchableOpacity>
+       <TouchableOpacity>
+       <Text> 2 </Text>
+       </TouchableOpacity>
+        <TouchableOpacity>
+        <Text> 3 </Text>
+        </TouchableOpacity>
+        <TouchableOpacity>
+         <Text> 4 </Text>
+         </TouchableOpacity>
+        <TouchableOpacity>
+        <Text> 5 </Text>
+          </TouchableOpacity>
+        <TouchableOpacity>
+          <Text> 6 </Text>
+           </TouchableOpacity>
+        <TouchableOpacity>
+           <Text> 7 </Text>
+            </TouchableOpacity>
+        <TouchableOpacity>
+            <Text> 8 </Text>
+             </TouchableOpacity>
+         <TouchableOpacity>
+             <Text> 9 </Text>
+              </TouchableOpacity>
+            </View>
+    </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  numero: {
+    fontSize: 40,
+    marginBottom: 20,
+  },
+  botao: {
+    backgroundColor: "black",
+    padding: 15,
+    borderRadius: 8,
+  },
+  textoBotao: {
+    color: "white",
+    fontSize: 18,
+  },
+  numerosCalculadora: {
+    justifyContent : "center"
+
+  }
+});
