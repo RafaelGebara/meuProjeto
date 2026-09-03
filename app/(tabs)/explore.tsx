@@ -1,7 +1,11 @@
-import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
+/**
+ * Aba "Sobre": explica como a calculadora foi organizada. Serve de documentação
+ * viva do projeto para quem abrir o app.
+ */
 
-import { ExternalLink } from '@/components/external-link';
+import { Image } from 'expo-image';
+import { StyleSheet } from 'react-native';
+
 import ParallaxScrollView from '@/components/parallax-scroll-view';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
@@ -9,91 +13,76 @@ import { Collapsible } from '@/components/ui/collapsible';
 import { IconSymbol } from '@/components/ui/icon-symbol';
 import { Fonts } from '@/constants/theme';
 
-export default function TabTwoScreen() {
+export default function AboutScreen() {
   return (
     <ParallaxScrollView
       headerBackgroundColor={{ light: '#D0D0D0', dark: '#353636' }}
       headerImage={
         <IconSymbol
-          size={310}
+          size={280}
           color="#808080"
-          name="chevron.left.forwardslash.chevron.right"
+          name="plus.forwardslash.minus"
           style={styles.headerImage}
         />
       }>
       <ThemedView style={styles.titleContainer}>
-        <ThemedText
-          type="title"
-          style={{
-            fontFamily: Fonts.rounded,
-          }}>
-          Explore
+        <ThemedText type="title" style={{ fontFamily: Fonts.rounded }}>
+          Sobre a calculadora
         </ThemedText>
       </ThemedView>
-      <ThemedText>This app includes example code to help you get started.</ThemedText>
-      <Collapsible title="File-based routing">
+
+      <ThemedText>
+        Este app é uma calculadora simples construída com Expo Router. A lógica de
+        cálculo é totalmente separada da interface.
+      </ThemedText>
+
+      <Collapsible title="Motor puro (src/calculator)">
         <ThemedText>
-          This app has two screens:{' '}
-          <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> and{' '}
-          <ThemedText type="defaultSemiBold">app/(tabs)/explore.tsx</ThemedText>
+          A pasta <ThemedText type="defaultSemiBold">src/calculator</ThemedText> contém uma
+          máquina de estados pura: a função{' '}
+          <ThemedText type="defaultSemiBold">reduce(state, key)</ThemedText> recebe o estado
+          atual e uma tecla e devolve o próximo estado, sem efeitos colaterais.
         </ThemedText>
         <ThemedText>
-          The layout file in <ThemedText type="defaultSemiBold">app/(tabs)/_layout.tsx</ThemedText>{' '}
-          sets up the tab navigator.
-        </ThemedText>
-        <ExternalLink href="https://docs.expo.dev/router/introduction">
-          <ThemedText type="link">Learn more</ThemedText>
-        </ExternalLink>
-      </Collapsible>
-      <Collapsible title="Android, iOS, and web support">
-        <ThemedText>
-          You can open this project on Android, iOS, and the web. To open the web version, press{' '}
-          <ThemedText type="defaultSemiBold">w</ThemedText> in the terminal running this project.
+          Isso permite testar toda a aritmética, o encadeamento de operações e o
+          histórico sem renderizar nada.
         </ThemedText>
       </Collapsible>
-      <Collapsible title="Images">
+
+      <Collapsible title="Interface (components/calculator)">
         <ThemedText>
-          For static images, you can use the <ThemedText type="defaultSemiBold">@2x</ThemedText> and{' '}
-          <ThemedText type="defaultSemiBold">@3x</ThemedText> suffixes to provide files for
-          different screen densities
+          Os componentes <ThemedText type="defaultSemiBold">CalculatorDisplay</ThemedText>,{' '}
+          <ThemedText type="defaultSemiBold">CalculatorKeypad</ThemedText> e{' '}
+          <ThemedText type="defaultSemiBold">CalculatorHistory</ThemedText> apenas exibem
+          dados e disparam teclas. O layout do teclado é declarado em{' '}
+          <ThemedText type="defaultSemiBold">constants/calculator-layout.ts</ThemedText>.
         </ThemedText>
-        <Image
-          source={require('@/assets/images/react-logo.png')}
-          style={{ width: 100, height: 100, alignSelf: 'center' }}
-        />
-        <ExternalLink href="https://reactnative.dev/docs/images">
-          <ThemedText type="link">Learn more</ThemedText>
-        </ExternalLink>
       </Collapsible>
-      <Collapsible title="Light and dark mode components">
+
+      <Collapsible title="Hook de ligação (useCalculator)">
         <ThemedText>
-          This template has light and dark mode support. The{' '}
-          <ThemedText type="defaultSemiBold">useColorScheme()</ThemedText> hook lets you inspect
-          what the user&apos;s current color scheme is, and so you can adjust UI colors accordingly.
+          O hook <ThemedText type="defaultSemiBold">useCalculator</ThemedText> guarda o estado
+          com <ThemedText type="defaultSemiBold">useReducer</ThemedText> e expõe ações
+          memoizadas para a tela.
         </ThemedText>
-        <ExternalLink href="https://docs.expo.dev/develop/user-interface/color-themes/">
-          <ThemedText type="link">Learn more</ThemedText>
-        </ExternalLink>
       </Collapsible>
-      <Collapsible title="Animations">
+
+      <Collapsible title="Testes">
         <ThemedText>
-          This template includes an example of an animated component. The{' '}
-          <ThemedText type="defaultSemiBold">components/HelloWave.tsx</ThemedText> component uses
-          the powerful{' '}
+          As suítes em <ThemedText type="defaultSemiBold">src/calculator/__tests__</ThemedText>{' '}
+          cobrem operações, formatação e o motor. Rode com{' '}
           <ThemedText type="defaultSemiBold" style={{ fontFamily: Fonts.mono }}>
-            react-native-reanimated
-          </ThemedText>{' '}
-          library to create a waving hand animation.
+            npm test
+          </ThemedText>
+          .
         </ThemedText>
-        {Platform.select({
-          ios: (
-            <ThemedText>
-              The <ThemedText type="defaultSemiBold">components/ParallaxScrollView.tsx</ThemedText>{' '}
-              component provides a parallax effect for the header image.
-            </ThemedText>
-          ),
-        })}
       </Collapsible>
+
+      <Image
+        source={require('@/assets/images/react-logo.png')}
+        style={styles.logo}
+        contentFit="contain"
+      />
     </ParallaxScrollView>
   );
 }
@@ -101,12 +90,18 @@ export default function TabTwoScreen() {
 const styles = StyleSheet.create({
   headerImage: {
     color: '#808080',
-    bottom: -90,
-    left: -35,
+    bottom: -80,
+    left: -30,
     position: 'absolute',
   },
   titleContainer: {
     flexDirection: 'row',
     gap: 8,
+  },
+  logo: {
+    width: 100,
+    height: 100,
+    alignSelf: 'center',
+    marginTop: 8,
   },
 });
