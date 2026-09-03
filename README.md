@@ -1,50 +1,67 @@
-# Welcome to your Expo app 👋
+# Calculadora (Expo)
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Calculadora simples feita com [Expo](https://expo.dev) e Expo Router. A lógica de
+cálculo é uma máquina de estados pura, separada da interface e coberta por testes.
 
-## Get started
+## Como rodar
 
-1. Install dependencies
+1. Instale as dependências:
 
    ```bash
    npm install
    ```
 
-2. Start the app
+2. Inicie o app:
 
    ```bash
    npx expo start
    ```
 
-In the output, you'll find options to open the app in a
+   No terminal aparecem as opções para abrir em um emulador Android, no simulador
+   iOS, no Expo Go ou na web.
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+## Como usar
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+- **Dígitos, `,`** — montam o número no visor.
+- **`+ − × ÷`** — escolhem a operação. Operações em sequência são encadeadas e
+  avaliadas da esquerda para a direita (`2 + 3 × 4` = `20`).
+- **`=`** — conclui o cálculo e grava no histórico.
+- **`C`** — limpa o visor e a operação pendente (o histórico é mantido).
+- **`±`** — inverte o sinal do número atual.
+- **`%`** — porcentagem. Sozinho, divide por 100; com um operando à esquerda,
+  calcula a porcentagem sobre ele (`200 + 10 %` = `220`).
+- **`⌫`** — apaga o último dígito.
+- Divisão por zero mostra **Erro**; depois disso, só `C` volta a funcionar.
+- Na **web**, o teclado físico também funciona (números, operadores, `Enter`,
+  `Backspace`, `Esc`).
+- Tocar em um item do **histórico** devolve aquele resultado para o visor.
 
-## Get a fresh project
+## Estrutura
 
-When you're ready, run:
+| Caminho | Responsabilidade |
+| --- | --- |
+| `src/calculator/operations.ts` | Aritmética pura (soma, divisão, porcentagem, arredondamento de ponto flutuante). |
+| `src/calculator/format.ts` | Conversão entre o número interno e a string do visor; separador de milhar e notação científica. |
+| `src/calculator/engine.ts` | Máquina de estados: `reduce(state, key)` devolve o próximo estado sem efeitos colaterais. |
+| `src/calculator/keys.ts` | Fábricas de teclas e mapeamento do teclado físico. |
+| `hooks/use-calculator.ts` | Liga o motor puro ao React via `useReducer`. |
+| `constants/calculator-layout.ts` | Layout declarativo do teclado e paleta de cores. |
+| `components/calculator/*` | Visor, teclado, botão e histórico — apenas apresentação. |
+| `app/(tabs)/index.tsx` | Tela da calculadora. |
+| `app/(tabs)/explore.tsx` | Aba "Sobre" com a documentação viva do projeto. |
+
+## Testes
 
 ```bash
-npm run reset-project
+npm test
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+As suítes em `src/calculator/__tests__` cobrem as operações, a formatação e o
+motor completo (encadeamento, histórico, tratamento de erro, pureza do reducer).
 
-## Learn more
+## Qualidade
 
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+```bash
+npm run lint      # ESLint (eslint-config-expo)
+npx tsc --noEmit  # checagem de tipos
+```
